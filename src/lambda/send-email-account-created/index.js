@@ -4,13 +4,13 @@ var ses = new aws.SES({region: 'eu-west-2'});
 exports.handler = (event, context, callback) => {
     var params = {
         Destination: {
-            ToAddresses: ["joao.campos18@gmail.com"]
+            ToAddresses: [process.env.TEST_TO_ADDRESS]
         },
         Message: {
             Body: { Text: { Data: "Test" } },
             Subject: { Data: "Test Email" }
         },
-        Source: "joaocampos.dev@gmail.com"
+        Source: process.env.TEST_SOURCE
     };
 
     
