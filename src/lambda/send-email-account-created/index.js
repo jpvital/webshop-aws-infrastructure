@@ -15,13 +15,17 @@ exports.handler = (event, context, callback) => {
 
     
      ses.sendEmail(params, function (err, data) {
-        callback(null, {err: err, data: data});
-        if (err) {
-            console.log(err);
-            context.fail(err);
-        } else {
-            console.log(data);
-            context.succeed(event);
-        }
+        if (err) callback(err, null);
+        else {
+            var response = {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(data),
+                isBase64Encoded: false,
+            };
+            callback(null, response);
+        };
     });
 };

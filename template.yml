@@ -11,9 +11,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: webshop-bucket
-  ##########
-  #API SPECS
-  ##########
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -106,8 +103,6 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref OrderTable
-  ##########
-  ##########
   UserPool:
     Type: "AWS::Cognito::UserPool"
     Properties:
@@ -121,6 +116,14 @@ Resources:
           AttributeDataType: String
           Mutable: false
           Required: true
+      AutoVerifiedAttributes:
+        - email
+  UserPoolClient:
+    Type: 'AWS::Cognito::UserPoolClient'
+    Properties:
+      ClientName: WebshopUserPoolClient
+      GenerateSecret: false
+      UserPoolId: !Ref UserPool
   OrderTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
