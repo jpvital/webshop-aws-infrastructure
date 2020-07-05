@@ -17,7 +17,7 @@ Resources:
       Name: webshop
       StageName: Prod
       Cors:
-        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowMethods: "'GET,POST'"
         AllowHeaders: "'Content-Type'"
         AllowOrigin: "'http://webshop-bucket.s3-website.eu-west-2.amazonaws.com'"
         MaxAge: "'600'"
@@ -74,8 +74,21 @@ Resources:
       Timeout: 100
       Environment:
         Variables:
-          TEST_TO_ADDRESS: 'joao.campos18@gmail.campos18'
+          TEST_TO_ADDRESS: 'joao.campos18@gmail.com'
           TEST_SOURCE: 'joaocampos.dev@gmail.com'
+      Policies:
+      - Statement:
+        - Sid: SESSendEmail
+          Effect: Allow
+          Action:
+          - ses:SendEmail
+          Resource: '*'
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+          - ssm:GetParameters
+          - ssm:GetParameter
+          Resource: arn:aws:ses:eu-west-2:368043304117:identity/*'
       Events:
         Api:
           Type: Api
