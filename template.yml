@@ -108,6 +108,19 @@ Resources:
             TableName: !Ref OrderTable
   ##########
   ##########
+  UserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: webshop-user-pool
+      Schema:
+        - Name: name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
   OrderTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
