@@ -11,18 +11,20 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: webshop-bucket
+  ##########
+  #API SPECS
+  ##########
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
       Name: webshop
       StageName: Prod
       Cors:
-        AllowMethods: "'POST, GET'"
-        AllowHeaders: "'X-Forwarded-For'"
-        AllowOrigin: "'www.example.com'"
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'http://webshop-bucket.s3-website.eu-west-2.amazonaws.com'"
         MaxAge: "'600'"
         AllowCredentials: True
-  # This is a Lambda function config associated with the source code: get-all-items.js
   getYoutubeFeedFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -33,9 +35,9 @@ Resources:
       Timeout: 100
       Environment:
         Variables:
-          YT_API_HOST: ''
-          YT_API_KEY: ''
-          YT_CHANNEL_ID: ''
+          YT_API_HOST: 'https://www.googleapis.com/youtube/v3'
+          YT_API_KEY: 'AIzaSyDOpt4JbWnoXHGMCtthSUMCgNUWYSzIugg'
+          YT_CHANNEL_ID: 'UCyQRql0NmT5_LwTXjk51wkg'
       Events:
         Api:
           Type: Api
@@ -54,9 +56,9 @@ Resources:
       Timeout: 100
       Environment:
         Variables:
-          STRIPE_API_HOST: ''
-          STRIPE_API_KEY_TEST: ''
-          STRIPE_API_SECRET_TEST: ''
+          STRIPE_API_HOST: 'https://api.stripe.com'
+          STRIPE_API_KEY_TEST: 'pk_test_51GqF9TCPYsEp9tH0vHmqEJv4Ir0YbAv2Tq2thfFoSK8vsTuqO9uunwra5KdfTd8EzBiUdK3meVfmmCscGzfkw3RW00e9hyGH30'
+          STRIPE_API_SECRET_TEST: 'sk_test_51GqF9TCPYsEp9tH0xQwmssuHSV4bvbxTCyZJhy80C92OxYwWK01d2pK5hm8XJyHxDQGKwVVpaXbaSb1wrUXA3nkE005yZpWZie'
       Events:
         Api:
           Type: Api
@@ -75,8 +77,8 @@ Resources:
       Timeout: 100
       Environment:
         Variables:
-          TEST_TO_ADDRESS: ''
-          TEST_SOURCE: ''
+          TEST_TO_ADDRESS: 'joao.campos18@gmail.campos18'
+          TEST_SOURCE: 'joaocampos.dev@gmail.com'
       Events:
         Api:
           Type: Api
@@ -102,15 +104,16 @@ Resources:
             RestApiId:
               Ref: ApiGatewayApi
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the OrderTable
         - DynamoDBCrudPolicy:
             TableName: !Ref OrderTable
+  ##########
+  ##########
   OrderTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       TableName: Orders
       PrimaryKey:
-        Name: id
+        Name: Id
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 2

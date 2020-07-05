@@ -11,10 +11,18 @@ exports.handler = (event, context, callback) => {
         TableName: 'Orders',
     };
 
-    docClient.put(params, (err, data) => {
+    docClient.put(params, (err, data) => { 
         if (err) callback(err, null);
         else {
-            callback(null, data);
+            var response = {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(data),
+                isBase64Encoded: false,
+            };
+            callback(null, response);
         };
     });
 };

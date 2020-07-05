@@ -20,7 +20,6 @@ exports.handler = (event, context, callback) => {
             console.log(err);
             context.fail(err);
         } else {
-            
             console.log(data);
             context.succeed(event);
         }
